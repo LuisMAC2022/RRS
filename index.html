@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapa de proyectos FES Acatlán</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" type="module" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
+  <header class="site-header">
+    <div class="branding">
+      <p class="eyebrow">Interfaz accesible y ligera</p>
+      <h1>Mapa de proyectos de reciclaje FES Acatlán</h1>
+    </div>
+    <nav aria-label="Navegación principal">
+      <ul class="nav-list">
+        <li><a href="#proyectos">Proyectos</a></li>
+        <li><a href="#tareas">Tareas</a></li>
+        <li><a href="#accesibilidad">Accesibilidad</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="contenido-principal" class="layout">
+    <section aria-labelledby="proyectos">
+      <div class="section-header">
+        <h2 id="proyectos">Proyectos activos</h2>
+        <p class="lede">Seguimiento inicial para cartón/papel, PET y composta con foco en accesibilidad y rendimiento.</p>
+      </div>
+      <div class="grid">
+        <article class="card" aria-labelledby="proyecto-carton">
+          <h3 id="proyecto-carton">Cartón y papel</h3>
+          <p>Gestión de recolección y reutilización de cartón y papel con equipos de cuatro personas por tarea.</p>
+          <p class="status-pill status-pendiente">Modelo listo para poblar canvas</p>
+        </article>
+        <article class="card" aria-labelledby="proyecto-pet">
+          <h3 id="proyecto-pet">PET</h3>
+          <p>Clasificación y compactación de PET con seguimiento de tiempos por tarea validada.</p>
+          <p class="status-pill status-progreso">Plan de datos inicial preparado</p>
+        </article>
+        <article class="card" aria-labelledby="proyecto-composta">
+          <h3 id="proyecto-composta">Composta</h3>
+          <p>Proceso completo de composta desde recolección hasta empaque con equipos coordinados.</p>
+          <p class="status-pill status-pendiente">Listo para enlazar con la lista accesible</p>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="tareas" class="tasks-preview">
+      <div class="section-header">
+        <h2 id="tareas">Vista previa de tareas</h2>
+        <p class="lede">Tareas estructuradas con estados, responsables, equipo mínimo de cuatro personas y límite de tiempo tras la validación.</p>
+      </div>
+      <div class="task-columns">
+        <article class="card" aria-label="Tareas de cartón y papel">
+          <h3>Cartón y papel</h3>
+          <ul class="task-list">
+            <li><strong>Recoger:</strong> pendiente · equipo confirmado</li>
+            <li><strong>Organizar:</strong> pendiente · equipo confirmado</li>
+            <li><strong>Cortar:</strong> en progreso · tiempo corriendo</li>
+            <li><strong>Pegar:</strong> pendiente · listo para validar inicio</li>
+          </ul>
+        </article>
+        <article class="card" aria-label="Tareas de PET">
+          <h3>PET</h3>
+          <ul class="task-list">
+            <li><strong>Recoger:</strong> pendiente · límite tras validar</li>
+            <li><strong>Lavar:</strong> en progreso · equipo en campo</li>
+            <li><strong>Organizar:</strong> pendiente · asignación lista</li>
+            <li><strong>Compactar:</strong> completada · dentro del tiempo</li>
+          </ul>
+        </article>
+        <article class="card" aria-label="Tareas de composta">
+          <h3>Composta</h3>
+          <ul class="task-list">
+            <li><strong>Recolectar:</strong> pendiente · reloj listo</li>
+            <li><strong>Mezclar:</strong> pendiente · validación próxima</li>
+            <li><strong>Remover:</strong> en progreso · dentro del margen</li>
+            <li><strong>Hidratar:</strong> pendiente · equipo asignado</li>
+            <li><strong>Empaquetar:</strong> completada · tiempo cumplido</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <aside class="info-panel" aria-labelledby="accesibilidad">
+    <h2 id="accesibilidad">Accesibilidad y rendimiento</h2>
+    <ul>
+      <li>Navegación con teclado y enlace para saltar al contenido.</li>
+      <li>Un solo <code>main</code> y jerarquía clara de encabezados.</li>
+      <li>CSS y JS locales, sin dependencias externas para reducir peso.</li>
+    </ul>
+  </aside>
+
+  <footer class="site-footer">
+    <p>Interfaz semántica lista para conectar con canvas y lógica de tareas.</p>
+  </footer>
+</body>
+</html>
