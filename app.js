@@ -181,3 +181,90 @@ export function filterTasksByState(state) {
     }))
     .filter((project) => project.tasks.length > 0);
 }
+
+/**
+ * Zonas mapeadas del campus para el canvas accesible.
+ * Cada pathBuilder usa coordenadas relativas al tamaño actual del lienzo
+ * para mantener proporciones en redimensiones.
+ */
+export const mapAreas = [
+  {
+    id: 'acopio',
+    name: 'Centro de acopio',
+    fill: 'rgba(31, 119, 180, 0.2)',
+    stroke: 'rgba(12, 54, 95, 0.8)',
+    pathBuilder: (width, height) => {
+      const path = new Path2D();
+      path.rect(width * 0.08, height * 0.32, width * 0.22, height * 0.2);
+      return path;
+    },
+  },
+  {
+    id: 'aulas',
+    name: 'Aulas B y patios laterales',
+    fill: 'rgba(46, 204, 113, 0.22)',
+    stroke: 'rgba(23, 111, 61, 0.8)',
+    pathBuilder: (width, height) => {
+      const path = new Path2D();
+      path.moveTo(width * 0.35, height * 0.2);
+      path.lineTo(width * 0.75, height * 0.2);
+      path.lineTo(width * 0.78, height * 0.34);
+      path.lineTo(width * 0.42, height * 0.34);
+      path.closePath();
+      return path;
+    },
+  },
+  {
+    id: 'laboratorio',
+    name: 'Laboratorio y patios verdes',
+    fill: 'rgba(255, 193, 7, 0.18)',
+    stroke: 'rgba(177, 109, 0, 0.85)',
+    pathBuilder: (width, height) => {
+      const path = new Path2D();
+      path.moveTo(width * 0.2, height * 0.6);
+      path.lineTo(width * 0.55, height * 0.6);
+      path.lineTo(width * 0.68, height * 0.82);
+      path.lineTo(width * 0.3, height * 0.82);
+      path.closePath();
+      return path;
+    },
+  },
+  {
+    id: 'servicios',
+    name: 'Servicios generales',
+    fill: 'rgba(255, 87, 51, 0.18)',
+    stroke: 'rgba(153, 32, 10, 0.85)',
+    pathBuilder: (width, height) => {
+      const path = new Path2D();
+      path.rect(width * 0.78, height * 0.45, width * 0.16, height * 0.22);
+      return path;
+    },
+  },
+];
+
+const cachedPaths = new Map();
+let lastCanvasSizeKey = '';
+
+/**
+ * Genera y memoriza los Path2D para cada zona del mapa.
+ * Reutiliza los paths mientras se mantenga el mismo tamaño de canvas,
+ * evitando trabajo extra en cada render.
+ */
+export function initializeMapPaths(canvasWidth, canvasHeight) {
+  const sizeKey = `${canvasWidth}x${canvasHeight}`;
+  if (sizeKey === lastCanvasSizeKey && cachedPaths.size === mapAreas.length) {
+    return cachedPaths;
+  }
+
+  cachedPaths.clear();
+  mapAreas.forEach((area) => {
+    cachedPaths.set(area.id, area.pathBuilder(canvasWidth, canvasHeight));
+  });
+
+  lastCanvasSizeKey = sizeKey;
+  return cachedPaths;
+}
+
+export function getCachedPath(areaId) {
+  return cachedPaths.get(areaId) || null;
+}
