@@ -126,6 +126,13 @@ body {
   box-shadow: 0 5px 15px rgba(15, 23, 42, 0.04);
 }
 
+#mapa-fes {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
 .card h3 {
   margin-top: 0;
   margin-bottom: 0.35rem;
