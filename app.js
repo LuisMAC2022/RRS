@@ -1,270 +1,384 @@
-/**
- * Modelo de datos mínimo para proyectos de reciclaje.
- * - Estados consistentes y legibles para SR (lectores de pantalla).
- * - Cada tarea requiere equipo de al menos 4 personas.
- * - Al validar el inicio, comienza una ventana de tiempo definida para terminar.
- */
-
-export const TASK_STATES = Object.freeze({
-  PENDING: 'pendiente',
-  IN_PROGRESS: 'en progreso',
-  DONE: 'completada',
+const OBJECT_TYPES = Object.freeze({
+  PET: 'pet',
+  BASURA: 'basura',
+  COMPONENTE: 'componente',
 });
 
-export const projects = [
-  {
-    id: 'carton',
-    name: 'Cartón y papel',
-    focusArea: 'Centro de acopio',
-    tasks: [
-      {
-        id: 'carton-recoger',
-        title: 'Recoger',
-        state: TASK_STATES.PENDING,
-        responsible: 'María López',
-        team: ['María López', 'Jesús Ramírez', 'Alicia Torres', 'David Cruz'],
-        validatedAt: null,
-        timeLimitHoursAfterValidation: 8,
-        dueDate: '2024-11-01',
-      },
-      {
-        id: 'carton-organizar',
-        title: 'Organizar',
-        state: TASK_STATES.PENDING,
-        responsible: 'Carlos Méndez',
-        team: ['Carlos Méndez', 'Juana Pérez', 'Rubén García', 'Paulina Ortega'],
-        validatedAt: null,
-        timeLimitHoursAfterValidation: 6,
-        dueDate: '2024-11-02',
-      },
-      {
-        id: 'carton-cortar',
-        title: 'Cortar',
-        state: TASK_STATES.IN_PROGRESS,
-        responsible: 'Juana Pérez',
-        team: ['Juana Pérez', 'Andrea Silva', 'Marco Luna', 'Sara Díaz'],
-        validatedAt: '2024-10-18T09:00:00Z',
-        timeLimitHoursAfterValidation: 5,
-        dueDate: '2024-10-18',
-      },
-      {
-        id: 'carton-pegar',
-        title: 'Pegar',
-        state: TASK_STATES.PENDING,
-        responsible: 'Alicia Torres',
-        team: ['Alicia Torres', 'Ernesto Aguilar', 'Brenda Flores', 'Óscar Neri'],
-        validatedAt: null,
-        timeLimitHoursAfterValidation: 4,
-        dueDate: '2024-11-03',
-      },
-    ],
-  },
-  {
-    id: 'pet',
-    name: 'PET',
-    focusArea: 'Aulas B y patios laterales',
-    tasks: [
-      {
-        id: 'pet-recoger',
-        title: 'Recoger',
-        state: TASK_STATES.PENDING,
-        responsible: 'Laura Sánchez',
-        team: ['Laura Sánchez', 'Hugo Martínez', 'Ana Beltrán', 'Rafael Gómez'],
-        validatedAt: null,
-        timeLimitHoursAfterValidation: 8,
-        dueDate: '2024-10-28',
-      },
-      {
-        id: 'pet-lavar',
-        title: 'Lavar',
-        state: TASK_STATES.IN_PROGRESS,
-        responsible: 'Hugo Martínez',
-        team: ['Hugo Martínez', 'Itzel Ríos', 'Kevin Ávila', 'Daniela Vázquez'],
-        validatedAt: '2024-10-17T15:00:00Z',
-        timeLimitHoursAfterValidation: 6,
-        dueDate: '2024-10-18',
-      },
-      {
-        id: 'pet-organizar',
-        title: 'Organizar',
-        state: TASK_STATES.PENDING,
-        responsible: 'Ana Beltrán',
-        team: ['Ana Beltrán', 'Mario Pineda', 'Sofía Rangel', 'Luis Herrera'],
-        validatedAt: null,
-        timeLimitHoursAfterValidation: 5,
-        dueDate: '2024-10-30',
-      },
-      {
-        id: 'pet-compactar',
-        title: 'Compactar',
-        state: TASK_STATES.DONE,
-        responsible: 'Kevin Ávila',
-        team: ['Kevin Ávila', 'Itzel Ríos', 'Hugo Martínez', 'Daniela Vázquez'],
-        validatedAt: '2024-10-15T10:00:00Z',
-        timeLimitHoursAfterValidation: 7,
-        dueDate: '2024-10-16',
-      },
-    ],
-  },
-  {
-    id: 'composta',
-    name: 'Composta',
-    focusArea: 'Patios verdes y laboratorio',
-    tasks: [
-      {
-        id: 'composta-recolectar',
-        title: 'Recolectar',
-        state: TASK_STATES.PENDING,
-        responsible: 'Rosa Hernández',
-        team: ['Rosa Hernández', 'Miguel Paredes', 'Elena Cruz', 'José Maldonado'],
-        validatedAt: null,
-        timeLimitHoursAfterValidation: 10,
-        dueDate: '2024-11-05',
-      },
-      {
-        id: 'composta-mezclar',
-        title: 'Mezclar',
-        state: TASK_STATES.PENDING,
-        responsible: 'Elena Cruz',
-        team: ['Elena Cruz', 'Liliana Ochoa', 'Fernando Vega', 'Patricia Ruiz'],
-        validatedAt: null,
-        timeLimitHoursAfterValidation: 8,
-        dueDate: '2024-11-06',
-      },
-      {
-        id: 'composta-remover',
-        title: 'Remover',
-        state: TASK_STATES.IN_PROGRESS,
-        responsible: 'Miguel Paredes',
-        team: ['Miguel Paredes', 'Ximena Soto', 'César León', 'Diana Mora'],
-        validatedAt: '2024-10-17T12:30:00Z',
-        timeLimitHoursAfterValidation: 6,
-        dueDate: '2024-10-18',
-      },
-      {
-        id: 'composta-hidratar',
-        title: 'Hidratar',
-        state: TASK_STATES.PENDING,
-        responsible: 'Patricia Ruiz',
-        team: ['Patricia Ruiz', 'José Maldonado', 'Araceli Vázquez', 'Carmen Figueroa'],
-        validatedAt: null,
-        timeLimitHoursAfterValidation: 5,
-        dueDate: '2024-11-04',
-      },
-      {
-        id: 'composta-empaquetar',
-        title: 'Empaquetar',
-        state: TASK_STATES.DONE,
-        responsible: 'Liliana Ochoa',
-        team: ['Liliana Ochoa', 'Fernando Vega', 'Patricia Ruiz', 'Araceli Vázquez'],
-        validatedAt: '2024-10-10T08:00:00Z',
-        timeLimitHoursAfterValidation: 4,
-        dueDate: '2024-10-11',
-      },
-    ],
-  },
+const PET_COLORS = [
+  { id: 'transparente', label: 'Transparente', color: '#a6e3ff' },
+  { id: 'azul', label: 'Azul', color: '#60a5fa' },
+  { id: 'verde', label: 'Verde', color: '#34d399' },
+  { id: 'dorado', label: 'Dorado', color: '#fbbf24' },
 ];
 
-export const validationWindowMessage =
-  'Una vez validado el inicio de la tarea, comienza el conteo de tiempo disponible para terminarla.';
-
-/**
- * Utilidad de referencia futura: obtiene tareas filtradas por estado.
- * Mantiene inmutabilidad retornando nuevas colecciones.
- */
-export function filterTasksByState(state) {
-  if (!Object.values(TASK_STATES).includes(state)) return [];
-  return projects
-    .map((project) => ({
-      ...project,
-      tasks: project.tasks.filter((task) => task.state === state),
-    }))
-    .filter((project) => project.tasks.length > 0);
-}
-
-/**
- * Zonas mapeadas del campus para el canvas accesible.
- * Cada pathBuilder usa coordenadas relativas al tamaño actual del lienzo
- * para mantener proporciones en redimensiones.
- */
-export const mapAreas = [
-  {
-    id: 'acopio',
-    name: 'Centro de acopio',
-    fill: 'rgba(31, 119, 180, 0.2)',
-    stroke: 'rgba(12, 54, 95, 0.8)',
-    pathBuilder: (width, height) => {
-      const path = new Path2D();
-      path.rect(width * 0.08, height * 0.32, width * 0.22, height * 0.2);
-      return path;
-    },
-  },
-  {
-    id: 'aulas',
-    name: 'Aulas B y patios laterales',
-    fill: 'rgba(46, 204, 113, 0.22)',
-    stroke: 'rgba(23, 111, 61, 0.8)',
-    pathBuilder: (width, height) => {
-      const path = new Path2D();
-      path.moveTo(width * 0.35, height * 0.2);
-      path.lineTo(width * 0.75, height * 0.2);
-      path.lineTo(width * 0.78, height * 0.34);
-      path.lineTo(width * 0.42, height * 0.34);
-      path.closePath();
-      return path;
-    },
-  },
-  {
-    id: 'laboratorio',
-    name: 'Laboratorio y patios verdes',
-    fill: 'rgba(255, 193, 7, 0.18)',
-    stroke: 'rgba(177, 109, 0, 0.85)',
-    pathBuilder: (width, height) => {
-      const path = new Path2D();
-      path.moveTo(width * 0.2, height * 0.6);
-      path.lineTo(width * 0.55, height * 0.6);
-      path.lineTo(width * 0.68, height * 0.82);
-      path.lineTo(width * 0.3, height * 0.82);
-      path.closePath();
-      return path;
-    },
-  },
-  {
-    id: 'servicios',
-    name: 'Servicios generales',
-    fill: 'rgba(255, 87, 51, 0.18)',
-    stroke: 'rgba(153, 32, 10, 0.85)',
-    pathBuilder: (width, height) => {
-      const path = new Path2D();
-      path.rect(width * 0.78, height * 0.45, width * 0.16, height * 0.22);
-      return path;
-    },
-  },
-];
-
-const cachedPaths = new Map();
-let lastCanvasSizeKey = '';
-
-/**
- * Genera y memoriza los Path2D para cada zona del mapa.
- * Reutiliza los paths mientras se mantenga el mismo tamaño de canvas,
- * evitando trabajo extra en cada render.
- */
-export function initializeMapPaths(canvasWidth, canvasHeight) {
-  const sizeKey = `${canvasWidth}x${canvasHeight}`;
-  if (sizeKey === lastCanvasSizeKey && cachedPaths.size === mapAreas.length) {
-    return cachedPaths;
+class ObjetoCayendo {
+  constructor(type, x, y, speed, colorId = null, contamination = 0) {
+    this.type = type;
+    this.x = x;
+    this.y = y;
+    this.radius = 14;
+    this.speed = speed;
+    this.colorId = colorId;
+    this.contamination = contamination; // 0 a 1
   }
 
-  cachedPaths.clear();
-  mapAreas.forEach((area) => {
-    cachedPaths.set(area.id, area.pathBuilder(canvasWidth, canvasHeight));
-  });
+  update(delta) {
+    this.y += this.speed * delta;
+  }
 
-  lastCanvasSizeKey = sizeKey;
-  return cachedPaths;
+  draw(ctx) {
+    ctx.save();
+    if (this.type === OBJECT_TYPES.PET) {
+      const petColor = PET_COLORS.find((c) => c.id === this.colorId) || PET_COLORS[0];
+      ctx.fillStyle = petColor.color;
+      ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+      ctx.lineWidth = 2;
+    } else if (this.type === OBJECT_TYPES.BASURA) {
+      ctx.fillStyle = '#ef4444';
+      ctx.strokeStyle = '#b91c1c';
+      ctx.lineWidth = 2;
+    } else {
+      ctx.fillStyle = '#c084fc';
+      ctx.strokeStyle = '#7c3aed';
+      ctx.lineWidth = 2;
+    }
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  }
 }
 
-export function getCachedPath(areaId) {
-  return cachedPaths.get(areaId) || null;
+class Bote {
+  constructor(canvasWidth, canvasHeight) {
+    this.width = 90;
+    this.height = 24;
+    this.x = canvasWidth / 2 - this.width / 2;
+    this.y = canvasHeight - this.height - 12;
+    this.speed = 240;
+    this.capacidadMaxima = 10;
+    this.capacidadActual = 0;
+    this.contaminacion = 0; // 0 a 1
+  }
+
+  move(direction, delta, canvasWidth) {
+    this.x += direction * this.speed * delta;
+    this.x = Math.max(0, Math.min(this.x, canvasWidth - this.width));
+  }
+
+  puedeRecoger() {
+    return this.capacidadActual < this.capacidadMaxima;
+  }
+
+  collect(objeto) {
+    if (!this.puedeRecoger()) return false;
+    this.capacidadActual += 1;
+    this.contaminacion = Math.min(
+      1,
+      this.contaminacion + (objeto.type === OBJECT_TYPES.BASURA ? 0.35 : objeto.contamination)
+    );
+    return true;
+  }
+
+  vaciar() {
+    const carga = {
+      pet: this.capacidadActual,
+      contaminacion: this.contaminacion,
+    };
+    this.capacidadActual = 0;
+    this.contaminacion = 0;
+    return carga;
+  }
+
+  draw(ctx) {
+    ctx.save();
+    const baseGradient = ctx.createLinearGradient(this.x, this.y, this.x, this.y + this.height);
+    baseGradient.addColorStop(0, '#0ea5e9');
+    baseGradient.addColorStop(1, '#0369a1');
+    ctx.fillStyle = baseGradient;
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+
+    ctx.strokeStyle = '#22d3ee';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(this.x, this.y, this.width, this.height);
+
+    const contaminationHeight = this.contaminacion * this.height;
+    if (contaminationHeight > 0) {
+      ctx.fillStyle = 'rgba(239,68,68,0.35)';
+      ctx.fillRect(this.x, this.y + this.height - contaminationHeight, this.width, contaminationHeight);
+    }
+
+    ctx.restore();
+  }
 }
+
+class Almacenamiento {
+  constructor() {
+    this.materialesSinProcesar = PET_COLORS.reduce((acc, color) => ({ ...acc, [color.id]: 0 }), {});
+    this.materialesProcesados = 0;
+    this.componentes = 0;
+    this.maquinaria = 0;
+    this.contaminacionHistorica = [];
+  }
+
+  depositarCarga(carga, detalles) {
+    if (detalles.petColores.length) {
+      detalles.petColores.forEach((colorId) => {
+        this.materialesSinProcesar[colorId] += 1;
+      });
+    }
+    if (detalles.componentes > 0) {
+      this.componentes += detalles.componentes;
+    }
+    this.contaminacionHistorica.push(carga.contaminacion);
+    if (this.contaminacionHistorica.length > 20) {
+      this.contaminacionHistorica.shift();
+    }
+  }
+}
+
+class HUD {
+  constructor() {
+    this.capacidadActual = document.getElementById('hud-capacidad-actual');
+    this.capacidadMaxima = document.getElementById('hud-capacidad-maxima');
+    this.contaminacion = document.getElementById('hud-contaminacion');
+    this.petPorColor = {
+      transparente: document.getElementById('hud-pet-transparente'),
+      azul: document.getElementById('hud-pet-azul'),
+      verde: document.getElementById('hud-pet-verde'),
+      dorado: document.getElementById('hud-pet-dorado'),
+    };
+    this.componentes = document.getElementById('hud-componentes');
+    this.maquinaria = document.getElementById('hud-maquinaria');
+  }
+
+  updateBote(bote) {
+    this.capacidadActual.textContent = bote.capacidadActual.toString();
+    this.capacidadMaxima.textContent = bote.capacidadMaxima.toString();
+    this.contaminacion.textContent = `${Math.round(bote.contaminacion * 100)}%`;
+  }
+
+  updateAlmacenamiento(almacenamiento) {
+    PET_COLORS.forEach((color) => {
+      this.petPorColor[color.id].textContent = almacenamiento.materialesSinProcesar[color.id];
+    });
+    this.componentes.textContent = almacenamiento.componentes;
+    this.maquinaria.textContent = almacenamiento.maquinaria;
+  }
+}
+
+class Game {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.objects = [];
+    this.bote = new Bote(canvas.width, canvas.height);
+    this.almacenamiento = new Almacenamiento();
+    this.hud = new HUD();
+    this.lastTimestamp = 0;
+    this.spawnTimer = 0;
+    this.reducedMotion = canvas.dataset.reducedMotion === 'true';
+    const intervaloPreferido = canvas.dataset.spawnInterval
+      ? Number.parseInt(canvas.dataset.spawnInterval, 10)
+      : 950;
+    this.spawnInterval = Number.isFinite(intervaloPreferido) ? intervaloPreferido : 950;
+    this.spawnRange = this.reducedMotion ? [1100, 1600] : [800, 1300];
+    this.keys = new Set();
+    this.petColoresEnBote = [];
+    this.componentesEnBote = 0;
+    this.inicializarEventos();
+    this.resizeCanvas();
+    window.requestAnimationFrame((ts) => this.loop(ts));
+  }
+
+  inicializarEventos() {
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        this.keys.add(event.key);
+      }
+      if (event.code === 'Space') {
+        event.preventDefault();
+        this.vaciarBote();
+      }
+    });
+
+    window.addEventListener('keyup', (event) => {
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        this.keys.delete(event.key);
+      }
+    });
+
+    document.getElementById('mover-izquierda').addEventListener('click', () => {
+      this.moverBote(-1, 1 / 60);
+    });
+    document.getElementById('mover-derecha').addEventListener('click', () => {
+      this.moverBote(1, 1 / 60);
+    });
+    document.getElementById('vaciar-bote').addEventListener('click', () => this.vaciarBote());
+
+    window.addEventListener('resize', () => this.resizeCanvas());
+  }
+
+  resizeCanvas() {
+    const ratio = this.canvas.width / this.canvas.height;
+    const availableWidth = this.canvas.clientWidth;
+    const newWidth = Math.max(320, availableWidth);
+    const newHeight = newWidth / ratio;
+    this.canvas.width = newWidth;
+    this.canvas.height = newHeight;
+    this.bote.y = this.canvas.height - this.bote.height - 12;
+  }
+
+  loop(timestamp) {
+    const delta = Math.min(1, (timestamp - this.lastTimestamp) / 1000);
+    this.lastTimestamp = timestamp;
+
+    this.update(delta);
+    this.draw();
+
+    window.requestAnimationFrame((ts) => this.loop(ts));
+  }
+
+  update(delta) {
+    this.spawnTimer += delta * 1000;
+    if (this.spawnTimer >= this.spawnInterval) {
+      this.spawnTimer = 0;
+      this.spawnObjeto();
+      const [min, max] = this.spawnRange;
+      this.spawnInterval = min + Math.random() * (max - min);
+    }
+
+    this.applyInput(delta);
+    this.objects.forEach((obj) => obj.update(delta));
+    this.detectarColisiones();
+    this.objects = this.objects.filter((obj) => obj.y - obj.radius <= this.canvas.height + 20);
+    this.hud.updateBote(this.bote);
+    this.hud.updateAlmacenamiento(this.almacenamiento);
+  }
+
+  applyInput(delta) {
+    let direction = 0;
+    if (this.keys.has('ArrowLeft')) direction -= 1;
+    if (this.keys.has('ArrowRight')) direction += 1;
+    if (direction !== 0) {
+      this.moverBote(direction, delta);
+    }
+  }
+
+  moverBote(direction, delta) {
+    this.bote.move(direction, delta, this.canvas.width);
+  }
+
+  spawnObjeto() {
+    const x = Math.random() * (this.canvas.width - 40) + 20;
+    const speed = (this.reducedMotion ? 60 : 90) + Math.random() * 90;
+    const typeRoll = Math.random();
+    if (typeRoll < 0.65) {
+      const color = PET_COLORS[Math.floor(Math.random() * PET_COLORS.length)];
+      const contamination = 0.05 + Math.random() * 0.25;
+      this.objects.push(new ObjetoCayendo(OBJECT_TYPES.PET, x, -10, speed, color.id, contamination));
+    } else if (typeRoll < 0.85) {
+      const contamination = 0.45 + Math.random() * 0.3;
+      this.objects.push(new ObjetoCayendo(OBJECT_TYPES.BASURA, x, -10, speed, null, contamination));
+    } else {
+      this.objects.push(new ObjetoCayendo(OBJECT_TYPES.COMPONENTE, x, -10, speed, null, 0));
+    }
+  }
+
+  detectarColisiones() {
+    this.objects = this.objects.filter((objeto) => {
+      if (!this.bote.puedeRecoger()) return true;
+      const enRangoVertical = objeto.y + objeto.radius >= this.bote.y;
+      const enRangoHorizontal =
+        objeto.x + objeto.radius >= this.bote.x && objeto.x - objeto.radius <= this.bote.x + this.bote.width;
+
+      if (enRangoVertical && enRangoHorizontal) {
+        const recogido = this.bote.collect(objeto);
+        if (recogido) {
+          if (objeto.type === OBJECT_TYPES.PET) {
+            this.petColoresEnBote.push(objeto.colorId);
+          }
+          if (objeto.type === OBJECT_TYPES.COMPONENTE) {
+            this.componentesEnBote += 1;
+          }
+          return false;
+        }
+      }
+      return true;
+    });
+  }
+
+  vaciarBote() {
+    if (this.bote.capacidadActual === 0) return;
+    const carga = this.bote.vaciar();
+    this.almacenamiento.depositarCarga(carga, {
+      petColores: [...this.petColoresEnBote],
+      componentes: this.componentesEnBote,
+    });
+    this.petColoresEnBote = [];
+    this.componentesEnBote = 0;
+  }
+
+  draw() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.drawBackground();
+    this.objects.forEach((obj) => obj.draw(this.ctx));
+    this.bote.draw(this.ctx);
+    this.drawHUDOverlay();
+  }
+
+  drawBackground() {
+    const { width, height } = this.canvas;
+    const gradient = this.ctx.createLinearGradient(0, 0, 0, height);
+    gradient.addColorStop(0, '#0f273b');
+    gradient.addColorStop(1, '#0a1322');
+    this.ctx.fillStyle = gradient;
+    this.ctx.fillRect(0, 0, width, height);
+
+    this.ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    this.ctx.lineWidth = 1;
+    const gridSize = 80;
+    for (let x = 0; x < width; x += gridSize) {
+      this.ctx.beginPath();
+      this.ctx.moveTo(x, 0);
+      this.ctx.lineTo(x, height);
+      this.ctx.stroke();
+    }
+    for (let y = 0; y < height; y += gridSize) {
+      this.ctx.beginPath();
+      this.ctx.moveTo(0, y);
+      this.ctx.lineTo(width, y);
+      this.ctx.stroke();
+    }
+  }
+
+  drawHUDOverlay() {
+    const label = `Capacidad: ${this.bote.capacidadActual}/${this.bote.capacidadMaxima}`;
+    this.ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    this.ctx.font = '16px "Inter", system-ui, sans-serif';
+    this.ctx.fillText(label, 12, 22);
+
+    const contaminationText = `Contaminación: ${Math.round(this.bote.contaminacion * 100)}%`;
+    this.ctx.fillText(contaminationText, 12, 44);
+
+    if (this.bote.contaminacion >= 0.9) {
+      this.ctx.fillStyle = '#ef4444';
+      this.ctx.fillText('Lote no vendible por contaminación alta', 12, 66);
+    }
+  }
+}
+
+function init() {
+  const canvas = document.getElementById('juego-canvas');
+  if (!canvas.getContext) return;
+  // Respeta preferencia por reducir movimiento con velocidades menores.
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) {
+    canvas.dataset.reducedMotion = 'true';
+    canvas.dataset.spawnInterval = '1200';
+  }
+  new Game(canvas);
+}
+
+document.addEventListener('DOMContentLoaded', init);

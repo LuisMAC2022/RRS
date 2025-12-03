@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mapa de proyectos FES Acatlán</title>
+  <title>Prototipo PET 2D – Juego accesible</title>
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" type="module" defer></script>
 </head>
@@ -11,104 +11,75 @@
   <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
   <header class="site-header">
     <div class="branding">
-      <p class="eyebrow">Interfaz accesible y ligera</p>
-      <h1>Mapa de proyectos de reciclaje FES Acatlán</h1>
+      <p class="eyebrow">Prototipo accesible</p>
+      <h1>Juego de recolección de PET</h1>
+      <p class="lede">Controla el bote, recoge PET y vacíalo para enviarlo al almacenamiento.</p>
     </div>
-    <nav aria-label="Navegación principal">
-      <ul class="nav-list">
-        <li><a href="#proyectos">Proyectos</a></li>
-        <li><a href="#tareas">Tareas</a></li>
-        <li><a href="#accesibilidad">Accesibilidad</a></li>
-      </ul>
-    </nav>
   </header>
 
-  <main id="contenido-principal" class="layout">
-    <section aria-labelledby="proyectos">
+  <main id="contenido-principal" class="layout" aria-labelledby="titulo-juego">
+    <section class="game-panel" aria-labelledby="titulo-juego">
       <div class="section-header">
-        <h2 id="proyectos">Proyectos activos</h2>
-        <p class="lede">Seguimiento inicial para cartón/papel, PET y composta con foco en accesibilidad y rendimiento.</p>
+        <h2 id="titulo-juego">Simulación 2D en Canvas</h2>
+        <p class="lede">Movimientos con teclado o botones en pantalla. Vacía el bote para liberar capacidad.</p>
       </div>
-      <div class="grid">
-        <article class="card" aria-labelledby="proyecto-carton">
-          <h3 id="proyecto-carton">Cartón y papel</h3>
-          <p>Gestión de recolección y reutilización de cartón y papel con equipos de cuatro personas por tarea.</p>
-          <p class="status-pill status-pendiente">Modelo listo para poblar canvas</p>
-        </article>
-        <article class="card" aria-labelledby="proyecto-pet">
-          <h3 id="proyecto-pet">PET</h3>
-          <p>Clasificación y compactación de PET con seguimiento de tiempos por tarea validada.</p>
-          <p class="status-pill status-progreso">Plan de datos inicial preparado</p>
-        </article>
-        <article class="card" aria-labelledby="proyecto-composta">
-          <h3 id="proyecto-composta">Composta</h3>
-          <p>Proceso completo de composta desde recolección hasta empaque con equipos coordinados.</p>
-          <p class="status-pill status-pendiente">Listo para enlazar con la lista accesible</p>
-        </article>
+      <div class="game-wrapper" role="group" aria-label="Área de juego">
+        <canvas id="juego-canvas" width="960" height="540" role="img" aria-label="Minijuego de recolección de PET"></canvas>
+        <div class="controls" aria-label="Controles del bote">
+          <button type="button" id="mover-izquierda" aria-keyshortcuts="ArrowLeft" aria-label="Mover bote a la izquierda">⟵ Izquierda</button>
+          <button type="button" id="vaciar-bote" aria-keyshortcuts="Space" aria-label="Vaciar bote y enviar al almacenamiento">Vaciar bote</button>
+          <button type="button" id="mover-derecha" aria-keyshortcuts="ArrowRight" aria-label="Mover bote a la derecha">Derecha ⟶</button>
+        </div>
       </div>
     </section>
 
-    <section id="mapa" aria-labelledby="mapa-titulo" aria-describedby="mapa-descripcion">
+    <section class="status-panel" aria-labelledby="titulo-estado">
       <div class="section-header">
-        <h2 id="mapa-titulo">Mapa de áreas de reciclaje</h2>
-        <p id="mapa-descripcion" class="lede">Visualización base de los puntos de recolección y compostaje para conectar con los proyectos activos.</p>
+        <h2 id="titulo-estado">Estado del bote y contaminación</h2>
+        <p class="lede">Capacidad, contaminación acumulada y conteo en almacenamiento.</p>
       </div>
-      <div class="card">
-        <canvas id="mapa-fes" width="960" height="540" role="img" aria-label="Mapa simplificado de áreas de reciclaje FES Acatlán" tabindex="0">
-          Mapa simplificado de las áreas de reciclaje de FES Acatlán. El lienzo mostrará zonas de recolección, PET y composta para apoyar la navegación del proyecto.
-        </canvas>
-      </div>
-    </section>
-
-    <section aria-labelledby="tareas" class="tasks-preview">
-      <div class="section-header">
-        <h2 id="tareas">Vista previa de tareas</h2>
-        <p class="lede">Tareas estructuradas con estados, responsables, equipo mínimo de cuatro personas y límite de tiempo tras la validación.</p>
-      </div>
-      <div class="task-columns">
-        <article class="card" aria-label="Tareas de cartón y papel">
-          <h3>Cartón y papel</h3>
-          <ul class="task-list">
-            <li><strong>Recoger:</strong> pendiente · equipo confirmado</li>
-            <li><strong>Organizar:</strong> pendiente · equipo confirmado</li>
-            <li><strong>Cortar:</strong> en progreso · tiempo corriendo</li>
-            <li><strong>Pegar:</strong> pendiente · listo para validar inicio</li>
-          </ul>
-        </article>
-        <article class="card" aria-label="Tareas de PET">
-          <h3>PET</h3>
-          <ul class="task-list">
-            <li><strong>Recoger:</strong> pendiente · límite tras validar</li>
-            <li><strong>Lavar:</strong> en progreso · equipo en campo</li>
-            <li><strong>Organizar:</strong> pendiente · asignación lista</li>
-            <li><strong>Compactar:</strong> completada · dentro del tiempo</li>
-          </ul>
-        </article>
-        <article class="card" aria-label="Tareas de composta">
-          <h3>Composta</h3>
-          <ul class="task-list">
-            <li><strong>Recolectar:</strong> pendiente · reloj listo</li>
-            <li><strong>Mezclar:</strong> pendiente · validación próxima</li>
-            <li><strong>Remover:</strong> en progreso · dentro del margen</li>
-            <li><strong>Hidratar:</strong> pendiente · equipo asignado</li>
-            <li><strong>Empaquetar:</strong> completada · tiempo cumplido</li>
-          </ul>
-        </article>
-      </div>
+      <dl class="hud" aria-live="polite">
+        <div>
+          <dt>Capacidad actual</dt>
+          <dd id="hud-capacidad-actual">0</dd>
+        </div>
+        <div>
+          <dt>Capacidad máxima</dt>
+          <dd id="hud-capacidad-maxima">0</dd>
+        </div>
+        <div>
+          <dt>Nivel de contaminación</dt>
+          <dd id="hud-contaminacion">0%</dd>
+        </div>
+      </dl>
+      <section class="storage" aria-labelledby="titulo-almacenamiento">
+        <h3 id="titulo-almacenamiento">Almacenamiento</h3>
+        <div class="storage-grid">
+          <article aria-labelledby="materiales-sin-procesar" class="storage-card">
+            <h4 id="materiales-sin-procesar">Materiales sin procesar (PET)</h4>
+            <ul>
+              <li>Transparente: <span id="hud-pet-transparente">0</span></li>
+              <li>Azul: <span id="hud-pet-azul">0</span></li>
+              <li>Verde: <span id="hud-pet-verde">0</span></li>
+              <li>Dorado: <span id="hud-pet-dorado">0</span></li>
+            </ul>
+          </article>
+          <article aria-labelledby="componentes-titulo" class="storage-card">
+            <h4 id="componentes-titulo">Componentes</h4>
+            <p><span id="hud-componentes">0</span> unidades</p>
+          </article>
+          <article aria-labelledby="maquinaria-titulo" class="storage-card">
+            <h4 id="maquinaria-titulo">Maquinaria</h4>
+            <p><span id="hud-maquinaria">0</span> equipos</p>
+          </article>
+        </div>
+      </section>
     </section>
   </main>
 
-  <aside class="info-panel" aria-labelledby="accesibilidad">
-    <h2 id="accesibilidad">Accesibilidad y rendimiento</h2>
-    <ul>
-      <li>Navegación con teclado y enlace para saltar al contenido.</li>
-      <li>Un solo <code>main</code> y jerarquía clara de encabezados.</li>
-      <li>CSS y JS locales, sin dependencias externas para reducir peso.</li>
-    </ul>
-  </aside>
-
   <footer class="site-footer">
-    <p>Interfaz semántica lista para conectar con canvas y lógica de tareas.</p>
+    <p>Prototipo funcional enfocado en accesibilidad, rendimiento y jugabilidad móvil.</p>
+    <p>Controles: teclas de flecha o botones en pantalla. Espacio para vaciar.</p>
   </footer>
 </body>
 </html>
