@@ -75,6 +75,59 @@
         </div>
       </section>
     </section>
+
+    <section class="garden-panel" aria-labelledby="titulo-jardin">
+      <div class="section-header">
+        <h2 id="titulo-jardin">Jardín emergente 42×42</h2>
+        <p class="lede">Ciclo de vida del trébol blanco con reglas de suelo, humedad y reproducción natural.</p>
+      </div>
+
+      <div class="garden-layout">
+        <div class="garden-canvas-wrapper" role="group" aria-label="Área del jardín emergente">
+          <canvas
+            id="garden-canvas"
+            width="672"
+            height="672"
+            role="img"
+            aria-label="Simulación del jardín en cuadrícula de 42 por 42 celdas"
+          ></canvas>
+        </div>
+
+        <aside class="garden-hud" aria-labelledby="hud-jardin-titulo">
+          <h3 id="hud-jardin-titulo">Indicadores del jardín</h3>
+          <dl>
+            <div>
+              <dt>Humedad promedio</dt>
+              <dd id="hud-humedad-promedio">0</dd>
+            </div>
+            <div>
+              <dt>Nutrientes promedio</dt>
+              <dd id="hud-nutrientes-promedio">0</dd>
+            </div>
+            <div>
+              <dt>Cobertura vegetal</dt>
+              <dd id="hud-cobertura">0%</dd>
+            </div>
+            <div>
+              <dt>Reproducción activa</dt>
+              <dd id="hud-reproduccion">0 eventos/min</dd>
+            </div>
+          </dl>
+          <p class="hud-note">Valores normalizados entre 0 y 1 para reflejar la salud del suelo y la planta.</p>
+        </aside>
+      </div>
+
+      <section class="garden-rules" aria-labelledby="titulo-reglas-jardin">
+        <h3 id="titulo-reglas-jardin">Reglas emergentes y elección de especie</h3>
+        <ul>
+          <li><strong>Especie elegida:</strong> trébol blanco (Trifolium repens) por su crecimiento rastrero, fijación de nitrógeno y resistencia; permite observar colonización rápida y mejoras paulatinas del suelo.</li>
+          <li><strong>Suelo vivo:</strong> cada celda tiene humedad, nutrientes, compacidad, temperatura y sol. Estos valores varían con el tiempo y difunden a celdas vecinas.</li>
+          <li><strong>Ciclo de vida:</strong> brotes → juvenil → planta madura. El progreso depende de la combinación de humedad y nutrientes; condiciones secas o compactadas llevan a dormancia o muerte, devolviendo materia orgánica.</li>
+          <li><strong>Reproducción:</strong> una planta madura con buena salud esparce semillas a las celdas adyacentes siempre que haya humedad y nutrientes suficientes.</li>
+          <li><strong>Equilibrio realista:</strong> las plantas consumen recursos y los devuelven al morir; la humedad se estabiliza con el clima local, mientras que la compacidad responde a cambios de agua y raíces.</li>
+        </ul>
+      </section>
+    </section>
   </main>
 
   <footer class="site-footer">
