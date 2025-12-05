@@ -50,9 +50,7 @@ body {
 .site-header,
 .site-footer,
 .game-panel,
-.status-panel,
-.garden-panel,
-.rules {
+.status-panel {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 1rem;
@@ -103,16 +101,6 @@ body {
   background: linear-gradient(180deg, #0c2639 0%, #0b1724 100%);
   border-radius: 0.75rem;
   border: 1px solid var(--border);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
-}
-
-#jardin-canvas {
-  max-width: 100%;
-  width: 100%;
-  height: auto;
-  border-radius: 0.75rem;
-  border: 1px solid var(--border);
-  background: radial-gradient(circle at 20% 20%, #0d1f2f, #0b1620 50%);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
@@ -179,10 +167,6 @@ button:focus,
   margin: 0;
   font-size: 1.4rem;
   font-weight: 800;
-}
-
-.hud-garden {
-  margin-top: 0.5rem;
 }
 
 .storage h3 {
