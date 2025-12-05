@@ -369,16 +369,269 @@ class Game {
   }
 }
 
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+class SoilCell {
+  constructor() {
+    this.moisture = 0.35 + Math.random() * 0.25;
+    this.nutrients = 0.35 + Math.random() * 0.25;
+    this.compaction = 0.25 + Math.random() * 0.2; // 0 blando, 1 muy compactado
+    this.temperature = 18 + Math.random() * 6; // °C
+  }
+
+  hydrate(amount) {
+    this.moisture = clamp(this.moisture + amount, 0, 1);
+  }
+
+  enrich(amount) {
+    this.nutrients = clamp(this.nutrients + amount, 0, 1);
+  }
+}
+
+class PlantSpecies {
+  constructor({ name, growthRate, waterNeed, nutrientNeed, optimalTemp, seedEnergy, maxEnergy }) {
+    this.name = name;
+    this.growthRate = growthRate;
+    this.waterNeed = waterNeed;
+    this.nutrientNeed = nutrientNeed;
+    this.optimalTemp = optimalTemp;
+    this.seedEnergy = seedEnergy;
+    this.maxEnergy = maxEnergy;
+  }
+
+  static trifolium() {
+    return new PlantSpecies({
+      name: 'Trébol blanco',
+      growthRate: 0.12,
+      waterNeed: 0.35,
+      nutrientNeed: 0.3,
+      optimalTemp: 20,
+      seedEnergy: 0.7,
+      maxEnergy: 1.3,
+    });
+  }
+}
+
+class Plant {
+  constructor(species) {
+    this.species = species;
+    this.energy = 0.5;
+    this.age = 0;
+  }
+}
+
+class GardenGrid {
+  constructor(width = 42, height = 42) {
+    this.width = width;
+    this.height = height;
+    this.species = PlantSpecies.trifolium();
+    this.soil = Array.from({ length: height }, () => Array.from({ length: width }, () => new SoilCell()));
+    this.plants = Array.from({ length: height }, () => Array.from({ length: width }, () => null));
+    this.seedInitialPatches();
+  }
+
+  seedInitialPatches() {
+    const centerX = Math.floor(this.width / 2);
+    const centerY = Math.floor(this.height / 2);
+    for (let y = centerY - 2; y <= centerY + 2; y += 1) {
+      for (let x = centerX - 2; x <= centerX + 2; x += 1) {
+        if (Math.random() > 0.45) {
+          this.plants[y][x] = new Plant(this.species);
+        }
+      }
+    }
+  }
+
+  countNeighbors(x, y) {
+    let count = 0;
+    for (let dy = -1; dy <= 1; dy += 1) {
+      for (let dx = -1; dx <= 1; dx += 1) {
+        if (dx === 0 && dy === 0) continue;
+        const nx = x + dx;
+        const ny = y + dy;
+        if (nx >= 0 && nx < this.width && ny >= 0 && ny < this.height && this.plants[ny][nx]) {
+          count += 1;
+        }
+      }
+    }
+    return count;
+  }
+
+  step() {
+    const nextPlants = Array.from({ length: this.height }, () => Array.from({ length: this.width }, () => null));
+    let livePlants = 0;
+    let healthyPlants = 0;
+    let moistureSum = 0;
+    let nutrientSum = 0;
+
+    for (let y = 0; y < this.height; y += 1) {
+      for (let x = 0; x < this.width; x += 1) {
+        const soil = this.soil[y][x];
+        const plant = this.plants[y][x];
+        const neighbors = this.countNeighbors(x, y);
+
+        // Fluctuaciones ambientales suaves
+        const rainfall = Math.random() < 0.03 ? 0.08 : 0;
+        soil.hydrate(-0.01 + rainfall);
+        soil.enrich(-0.003 + 0.001 * neighbors);
+        soil.compaction = clamp(soil.compaction + (Math.random() - 0.5) * 0.01, 0.1, 0.9);
+        soil.temperature = clamp(soil.temperature + (Math.random() - 0.5) * 0.4, 14, 28);
+
+        if (plant) {
+          const waterDelta = soil.moisture - plant.species.waterNeed;
+          const nutrientDelta = soil.nutrients - plant.species.nutrientNeed;
+          const compactionPenalty = soil.compaction * 0.35;
+          const tempPenalty = Math.max(0, Math.abs(soil.temperature - plant.species.optimalTemp) / 14) * 0.25;
+          const neighborBonus = neighbors >= 2 && neighbors <= 4 ? 0.12 : neighbors > 5 ? -0.2 : -0.05;
+
+          const growthPotential =
+            plant.species.growthRate + waterDelta * 0.4 + nutrientDelta * 0.45 + neighborBonus - compactionPenalty - tempPenalty;
+          plant.energy = clamp(plant.energy + growthPotential, 0, plant.species.maxEnergy);
+          plant.age += 1;
+
+          soil.hydrate(-0.03);
+          soil.enrich(-0.012);
+
+          if (plant.energy <= 0 || plant.age > 420) {
+            soil.enrich(0.08);
+            nextPlants[y][x] = null;
+          } else {
+            nextPlants[y][x] = plant;
+            livePlants += 1;
+            if (plant.energy > 0.6) healthyPlants += 1;
+
+            if (plant.energy >= plant.species.seedEnergy && soil.moisture > 0.32 && soil.nutrients > 0.28) {
+              this.spreadSeeds(x, y, nextPlants, plant);
+              plant.energy -= 0.08;
+            }
+          }
+        } else {
+          // Recuperación del suelo en espacios vacíos
+          soil.hydrate(0.008);
+          soil.enrich(0.004);
+        }
+
+        moistureSum += soil.moisture;
+        nutrientSum += soil.nutrients;
+      }
+    }
+
+    this.plants = nextPlants;
+    const totalCells = this.width * this.height;
+    const coverage = (livePlants / totalCells) * 100;
+    return {
+      coverage: Math.round(coverage),
+      avgMoisture: (moistureSum / totalCells).toFixed(2),
+      avgNutrients: (nutrientSum / totalCells).toFixed(2),
+      healthyPlants,
+    };
+  }
+
+  spreadSeeds(x, y, nextPlants, parentPlant) {
+    for (let dy = -1; dy <= 1; dy += 1) {
+      for (let dx = -1; dx <= 1; dx += 1) {
+        if (dx === 0 && dy === 0) continue;
+        const nx = x + dx;
+        const ny = y + dy;
+        if (nx < 0 || nx >= this.width || ny < 0 || ny >= this.height) continue;
+        if (this.plants[ny][nx] || nextPlants[ny][nx]) continue;
+        const soil = this.soil[ny][nx];
+        const fertility = (soil.moisture + soil.nutrients) / 2 - soil.compaction * 0.2;
+        if (fertility > 0.35 && Math.random() < fertility) {
+          nextPlants[ny][nx] = new Plant(parentPlant.species);
+        }
+      }
+    }
+  }
+
+  draw(ctx, cellSize) {
+    for (let y = 0; y < this.height; y += 1) {
+      for (let x = 0; x < this.width; x += 1) {
+        const soil = this.soil[y][x];
+        const plant = this.plants[y][x];
+        const moistureColor = Math.round(140 + soil.moisture * 60);
+        ctx.fillStyle = `rgb(${moistureColor - 30}, ${moistureColor}, ${moistureColor - 10})`;
+        ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+
+        const nutrientOverlay = Math.round(soil.nutrients * 120);
+        ctx.fillStyle = `rgba(80, ${90 + nutrientOverlay}, 60, 0.25)`;
+        ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+
+        if (plant) {
+          const energyColor = Math.round(80 + plant.energy * 120);
+          ctx.fillStyle = `rgb(34, ${energyColor}, 90)`;
+          ctx.fillRect(x * cellSize + 1, y * cellSize + 1, cellSize - 2, cellSize - 2);
+        }
+      }
+    }
+  }
+}
+
+class GardenHUD {
+  constructor() {
+    this.coverage = document.getElementById('hud-cobertura');
+    this.moisture = document.getElementById('hud-humedad');
+    this.nutrients = document.getElementById('hud-nutrientes');
+    this.health = document.getElementById('hud-salud');
+  }
+
+  update(metrics) {
+    this.coverage.textContent = `${metrics.coverage}%`;
+    this.moisture.textContent = metrics.avgMoisture;
+    this.nutrients.textContent = metrics.avgNutrients;
+    this.health.textContent = metrics.healthyPlants.toString();
+  }
+}
+
+class GardenGame {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.grid = new GardenGrid(42, 42);
+    this.hud = new GardenHUD();
+    this.lastTimestamp = 0;
+    this.stepAccumulator = 0;
+    this.stepInterval = 650; // milisegundos entre evaluaciones del autómata
+    this.cellSize = Math.floor(Math.min(canvas.width, canvas.height) / this.grid.width);
+    window.requestAnimationFrame((ts) => this.loop(ts));
+  }
+
+  loop(timestamp) {
+    const delta = timestamp - this.lastTimestamp;
+    this.lastTimestamp = timestamp;
+    this.stepAccumulator += delta;
+
+    if (this.stepAccumulator >= this.stepInterval) {
+      const metrics = this.grid.step();
+      this.hud.update(metrics);
+      this.stepAccumulator = 0;
+    }
+
+    this.draw();
+    window.requestAnimationFrame((ts) => this.loop(ts));
+  }
+
+  draw() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.grid.draw(this.ctx, this.cellSize);
+  }
+}
+
 function init() {
   const canvas = document.getElementById('juego-canvas');
-  if (!canvas.getContext) return;
-  // Respeta preferencia por reducir movimiento con velocidades menores.
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (prefersReducedMotion) {
-    canvas.dataset.reducedMotion = 'true';
-    canvas.dataset.spawnInterval = '1200';
+  if (canvas && canvas.getContext) {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      canvas.dataset.reducedMotion = 'true';
+      canvas.dataset.spawnInterval = '1200';
+    }
+    new Game(canvas);
   }
-  new Game(canvas);
+
+  const gardenCanvas = document.getElementById('garden-canvas');
+  if (gardenCanvas && gardenCanvas.getContext) {
+    new GardenGame(gardenCanvas);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', init);

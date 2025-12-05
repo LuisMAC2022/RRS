@@ -75,6 +75,46 @@
         </div>
       </section>
     </section>
+
+    <section class="garden-panel" aria-labelledby="titulo-jardin">
+      <div class="section-header">
+        <h2 id="titulo-jardin">Jardín emergente 42x42</h2>
+        <p class="lede">Cada celda es tierra con humedad, nutrientes y compactación. Una especie pionera se expande según las condiciones.</p>
+      </div>
+      <div class="game-wrapper" role="group" aria-label="Simulación de jardín">
+        <canvas id="garden-canvas" width="504" height="504" role="img" aria-label="Jardín emergente de 42 por 42 celdas"></canvas>
+        <div class="garden-hud" aria-live="polite">
+          <div>
+            <p class="hud-label">Cobertura vegetal</p>
+            <p id="hud-cobertura" class="hud-value">0%</p>
+          </div>
+          <div>
+            <p class="hud-label">Humedad media</p>
+            <p id="hud-humedad" class="hud-value">0</p>
+          </div>
+          <div>
+            <p class="hud-label">Nutrientes medios</p>
+            <p id="hud-nutrientes" class="hud-value">0</p>
+          </div>
+          <div>
+            <p class="hud-label">Plantas sanas</p>
+            <p id="hud-salud" class="hud-value">0</p>
+          </div>
+        </div>
+      </div>
+      <article class="rules" aria-labelledby="titulo-reglas">
+        <h3 id="titulo-reglas">Reglas y justificación</h3>
+        <p>La primera especie es <strong>trébol blanco</strong> (Trifolium repens) porque fija nitrógeno, tolera suelos compactados y forma mantos densos, ideal para observar patrones emergentes.</p>
+        <ul>
+          <li><strong>Estado del suelo:</strong> cada celda guarda humedad, nutrientes, compactación y temperatura. Estos valores fluctúan levemente en cada ciclo.</li>
+          <li><strong>Crecimiento:</strong> una planta consume humedad y nutrientes. Si hay suficientes recursos y entre 2 y 4 vecinos vivos, crece más rápido; la compactación y el calor reducen su energía.</li>
+          <li><strong>Propagación:</strong> cuando una planta acumula energía alta y el suelo es fértil, lanza semillas a celdas adyacentes vacías con probabilidad proporcional a los recursos.</li>
+          <li><strong>Estrés y muerte:</strong> la sequía, la falta de nutrientes o la compactación extrema agotan la energía y la planta muere, liberando materia orgánica que fertiliza la celda.</li>
+          <li><strong>Playera mínima:</strong> el jugador observa las métricas y puede imaginar acciones futuras (regar, aportar composta) que modificarían humedad y nutrientes sin microgestión constante.</li>
+        </ul>
+        <p>El diseño prioriza variables reales (agua, nutrientes, compactación) para conectar con sensores físicos en el futuro y mantener una simulación intuitiva basada en la ecología del suelo.</p>
+      </article>
+    </section>
   </main>
 
   <footer class="site-footer">
