@@ -77,6 +77,64 @@
     </section>
   </main>
 
+  <section class="garden-panel" aria-labelledby="titulo-jardin">
+    <div class="section-header">
+      <h2 id="titulo-jardin">Jardín emergente 42x42</h2>
+      <p class="lede">
+        Simulación de un tapete de trébol blanco que reacciona a humedad, nutrientes, sol y compactación del suelo.
+      </p>
+    </div>
+
+    <div class="game-wrapper" role="group" aria-label="Jardín en cuadrícula de 42 por 42 celdas">
+      <canvas id="jardin-canvas" width="672" height="672" role="img"
+        aria-label="Vista del jardín donde crecen plantas según las condiciones del suelo"></canvas>
+      <dl class="hud hud-garden" aria-live="polite">
+        <div>
+          <dt>Cobertura vegetal</dt>
+          <dd id="hud-cobertura">0%</dd>
+        </div>
+        <div>
+          <dt>Biomasa estimada</dt>
+          <dd id="hud-biomasa">0.0</dd>
+        </div>
+        <div>
+          <dt>Humedad media</dt>
+          <dd id="hud-humedad">0.0</dd>
+        </div>
+        <div>
+          <dt>Nutrientes medios</dt>
+          <dd id="hud-nutrientes">0.0</dd>
+        </div>
+        <div>
+          <dt>Compactación media</dt>
+          <dd id="hud-compactacion">0.0</dd>
+        </div>
+      </dl>
+    </div>
+
+    <section class="rules" aria-labelledby="titulo-reglas-jardin">
+      <h3 id="titulo-reglas-jardin">Reglas y justificación</h3>
+      <p>
+        Se eligió el <strong>trébol blanco</strong> por su resistencia, crecimiento rastrero y capacidad de fijar nitrógeno. Estas
+        características permiten observar dinámicas emergentes interesantes sin requerir un sistema de riego perfecto.
+      </p>
+      <ul>
+        <li><strong>Recursos por celda:</strong> cada casilla guarda humedad, nutrientes, sol y compactación. Se ajustan con ruido
+          ambiental (evaporación, lluvia ligera, recuperación de nutrientes).</li>
+        <li><strong>Crecimiento:</strong> el trébol crece si humedad (0.35–0.75) y nutrientes (0.4–1) están en rango y la compactación no supera 0.7.
+          Fuera de rango la planta pierde vigor y puede secarse.</li>
+        <li><strong>Temperatura y sol:</strong> el calor excesivo reduce humedad útil, mientras que buena radiación acelera ligeramente el crecimiento.</li>
+        <li><strong>Expansión:</strong> cuando una planta es madura y hay recursos suficientes, emite estolones a celdas vecinas con probabilidades
+          mayores en suelos húmedos. La expansión usa nutrientes y humedad del origen.</li>
+        <li><strong>Competencia:</strong> demasiadas plantas alrededor elevan la demanda y bajan el crecimiento, generando patrones de parches densos y claros.</li>
+      </ul>
+      <p class="lede">
+        El objetivo es mostrar un sistema emergente que pueda escalar a datos reales de sensores de humedad, temperatura o compostaje
+        en fases futuras del proyecto.
+      </p>
+    </section>
+  </section>
+
   <footer class="site-footer">
     <p>Prototipo funcional enfocado en accesibilidad, rendimiento y jugabilidad móvil.</p>
     <p>Controles: teclas de flecha o botones en pantalla. Espacio para vaciar.</p>
